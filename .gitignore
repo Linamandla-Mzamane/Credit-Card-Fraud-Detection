@@ -1,0 +1,30 @@
+# Virtual environment
+.venv/
+
+# Editor/IDE state
+.idea/
+
+# Data
+data/raw/
+data/processed/
+
+# Trained models
+models/*.joblib
+
+# Local reference PDFs
+*.pdf
+
+# Python runtime artifacts
+__pycache__/
+.pytest_cache/
+dist/
+*.pyc
+*.egg-info/
+build/
+
+# Jupyter
+.ipynb_checkpoints/
+
+#AI Agent
+.claude/
+CLAUDE.md
