@@ -29,7 +29,7 @@ def test_download_dataset_creates_dir_and_calls_kagglehub(tmp_path, monkeypatch)
 
     assert fake_raw_dir.exists()
     assert calls == {"handle": "mlg-ulb/creditcardfraud", "output_dir": str(fake_raw_dir)}
-    assert result == str(fake_raw_dir)
+    assert result == fake_raw_dir / data.RAW_CSV_NAME
 
 def test_load_raw_data_uses_default_path_when_none_given(tmp_path, monkeypatch):
     fake_raw_dir = tmp_path / "raw"
