@@ -2,14 +2,23 @@ from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 
+from credit_fraud_pack.config import SCALE_COLS, PCA_COLS
+
 def build_preprocessor() -> ColumnTransformer:
-    """
-    :return: A ColumnTransformer that scales Time and Amount
-        and passes the PCA components (V1-V28) through unchanged
+    """ Build the feature preprocessor.
+
+    Scales `Time` and `Amount` with a `StandardScaler` and passes the
+    PCA components (`V1-V28`) through unchanged. Every other column is
+    dropped, so the estimator only ever sees the agreed feature set.
+
+    :return: A ColumnTransformer that emits a pandas DataFrame.
     """
     ct = ColumnTransformer(
-        transformers=[("scale_time_amount", StandardScaler(), ["Time", "Amount"])],
-        remainder="passthrough",
+        transformers=[
+            ("scale", StandardScaler(), SCALE_COLS),
+            ("pca", "passthrough", PCA_COLS),
+        ],
+        remainder="drop",
         verbose_feature_names_out=False
     )
     return ct.set_output(transform="pandas")
