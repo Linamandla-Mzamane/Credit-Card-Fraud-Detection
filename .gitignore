@@ -3,6 +3,7 @@
 
 # Editor/IDE state
 .idea/
+.mcp.json
 
 # Data
 data/raw/

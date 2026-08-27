@@ -8,7 +8,8 @@ RAW_CSV_NAME = "creditcard.csv"
 # Function for downloading dataset from kaggle
 def download_dataset() -> str:
     """
-    :return: A dataset from kaggle in csv format containing credit card info
+    :return: Path string to the directory where the Kaggle
+        credit-card-fraud CSV was downloaded.
     """
     RAW_DATA_DIR.mkdir(parents=True, exist_ok=True)
     return kagglehub.dataset_download(handle="mlg-ulb/creditcardfraud", output_dir=str(RAW_DATA_DIR))
