@@ -23,8 +23,8 @@ FIGURES_DIR = OUTPUTS_DIR / "figures"
 MODEL_COMPARISON_FILE = OUTPUTS_DIR / "model_comparison.csv"
 
 # Cost-matrix constants
-COST_FALSE_NEGATIVE = -1     # Missed fraud: money actually lost
-COST_FALSE_POSITIVE = -2    # Wrongly blocked legit transaction: incurred investigation costs
+COST_FALSE_NEGATIVE = 100.0     # Missed fraud: money actually lost
+COST_FALSE_POSITIVE = 5.0       # Wrongly blocked legit transaction: incurred investigation costs
 
 # Feature groups
 SCALE_COLS = ["Time", "Amount"]             # Need scaling, not part of PCA
