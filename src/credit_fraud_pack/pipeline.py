@@ -4,6 +4,7 @@ from sklearn.preprocessing import StandardScaler
 
 from credit_fraud_pack.config import SCALE_COLS, PCA_COLS
 
+
 def build_preprocessor() -> ColumnTransformer:
     """Build the feature preprocessor.
 
@@ -22,6 +23,7 @@ def build_preprocessor() -> ColumnTransformer:
         verbose_feature_names_out=False
     )
     return ct.set_output(transform="pandas")
+
 
 def build_model_pipeline(estimator) -> Pipeline:
     """Wrap estimator behind the standard preprocessor
