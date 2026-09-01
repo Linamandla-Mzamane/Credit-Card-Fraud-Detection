@@ -3,6 +3,7 @@
 
 # Editor/IDE state
 .idea/
+.vscode/
 .mcp.json
 
 # Data
