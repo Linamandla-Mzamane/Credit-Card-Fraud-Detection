@@ -22,7 +22,7 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = ["pytest"]
-notebook = ["jupyterlab", "ipykernel"]
+notebook = ["jupyterlab", "ipykernel", "ipywidgets"]
 
 [tool.setuptools.packages.find]
 where = ["src"]
