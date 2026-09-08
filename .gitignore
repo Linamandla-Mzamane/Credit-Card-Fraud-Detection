@@ -23,6 +23,7 @@ dist/
 *.pyc
 *.egg-info/
 build/
+.cache/ 
 
 # Jupyter
 .ipynb_checkpoints/
