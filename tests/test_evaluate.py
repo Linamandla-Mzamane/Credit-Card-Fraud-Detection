@@ -3,7 +3,8 @@ import numpy as np
 from sklearn.linear_model import LogisticRegression
 
 from credit_fraud_pack.config import COST_FALSE_POSITIVE, COST_FALSE_NEGATIVE
-from credit_fraud_pack.evaluate import classification_metrics, evaluate_classifier
+from credit_fraud_pack.evaluate import (classification_metrics, evaluate_classifier,
+                                        cost_by_threshold)
 
 
 Y_TRUE = np.array([0, 0, 0, 1, 1, 1])
@@ -89,3 +90,27 @@ def test_evaluate_classifier_matches_manual_call():
     expected = classification_metrics(y, y_pred, y_score)
 
     assert evaluate_classifier(model, X, y) == expected
+
+
+def test_cost_by_threshold_counts_errors_at_each_cutoff():
+    y_true = np.array([0, 0, 1, 1])
+    y_score = np.array([0.1, 0.6, 0.4, 0.9])
+
+    table = cost_by_threshold(y_true, y_score, thresholds=[0.5])
+    row = table.iloc[0]
+
+    # At 0.5: the legit row scored 0.6 is a false alarm, and the fraud
+    # scored 0.4 is missed.
+    assert (row["fn"], row["fp"]) == (1, 1)
+    assert row["expected_cost"] == COST_FALSE_NEGATIVE + COST_FALSE_POSITIVE
+
+
+def test_cost_by_threshold_agrees_with_classification_metrics():
+    y_true = np.array([0, 0, 1, 1])
+    y_score = np.array([0.1, 0.6, 0.4, 0.9])
+
+    table = cost_by_threshold(y_true, y_score, thresholds=[0.5])
+    y_pred = (y_score >= 0.5).astype(int)
+
+    assert table.iloc[0]["expected_cost"] == \
+        classification_metrics(y_true, y_pred)["expected_cost"]

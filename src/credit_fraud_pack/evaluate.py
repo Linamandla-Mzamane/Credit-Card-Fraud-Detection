@@ -61,6 +61,39 @@ def evaluate_classifier(estimator, X, y, threshold=0.5):
     y_pred = (y_score >= threshold).astype(int)
     return classification_metrics(y, y_pred, y_score)
 
+def cost_by_threshold(y_true, y_score, thresholds=None):
+    """Count errors and expected cost at each candidate threshold.
+
+    :param y_true: True 0 or 1 labels.
+    :param y_score: Predicted probability of fraud (class 1).
+    :param thresholds: Cut-offs to evaluate. Defaults to 0.005 to 0.995 in
+        steps of 0.005.
+    :return: DataFrame with one row per threshold and columns threshold,
+        fn, fp and expected_cost.
+    """
+    y_true = np.asarray(y_true)
+    y_score = np.asarray(y_score)
+
+    if thresholds is None:
+        # np.round removes floating-point noise such as 0.30000000000000004,
+        # so thresholds display and compare cleanly.
+        thresholds = np.round(np.arange(0.005, 1.0, 0.005), 3)
+
+    rows = []
+    for threshold in thresholds:
+        # Same rule as evaluate_classifier: flag as fraud at or above the cut-off.
+        flagged = y_score >= threshold
+        fn = int(np.sum((y_true == 1) & ~flagged))
+        fp = int(np.sum((y_true == 0) & flagged))
+        rows.append({
+            "threshold": threshold,
+            "fn": fn,
+            "fp": fp,
+            "expected_cost": fn * COST_FALSE_NEGATIVE + fp * COST_FALSE_POSITIVE,
+        })
+
+    return pd.DataFrame(rows)
+
 
 def plot_confusion_matrix(y_true, y_pred, title=None, ax=None):
     """Draw a 2x2 confusion matrix of raw counts.
