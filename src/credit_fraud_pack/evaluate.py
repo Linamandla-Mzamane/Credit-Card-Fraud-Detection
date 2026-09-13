@@ -81,10 +81,14 @@ def plot_confusion_matrix(y_true, y_pred, title=None, ax=None):
     return ax
 
 
-def plot_precision_recall_curve(y_true, y_score, label=None, ax=None):
+def plot_precision_recall_curve(y_true, y_score, label=None, ax=None,
+                                show_baseline=True):
     """Plot a precision-recall curve annotated with its AUPRC.
 
     :param y_score: Predicted probability of the positive class.
+    :param show_baseline: Draw the no-skill reference line. Pass False when
+        overlaying several models on one Axes, so the shared baseline is drawn
+        once rather than once per curve.
     :return: The matplotlib Axes.
     """
     precision, recall, _ = precision_recall_curve(y_true, y_score)
@@ -95,9 +99,10 @@ def plot_precision_recall_curve(y_true, y_score, label=None, ax=None):
 
     ax.plot(recall, precision, label=f"{label or 'model'}   (AUPRC = {auprc:.3f})")
 
-    prevalence = np.mean(y_true)
-    ax.axhline(prevalence, ls="--", color="grey",
-               label=f"No-skill ({prevalence:.4f})")
+    if show_baseline:
+            prevalence = np.mean(y_true)
+            ax.axhline(prevalence, ls="--", color="grey",
+                       label=f"No-skill ({prevalence:.4f})")
 
     ax.set_xlabel("Recall")
     ax.set_ylabel("Precision")
