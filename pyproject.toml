@@ -13,8 +13,7 @@ dependencies = [
     "scikit-learn",
     "xgboost",
     "tensorflow",
-    "imbalanced-learn",
-    "kagglehub",
+    "kagglehub>=0.4.3",
     "joblib",
     "matplotlib",
     "seaborn"
