@@ -1,3 +1,4 @@
+import shutil
 from pathlib import Path
 
 import kagglehub
@@ -9,16 +10,32 @@ RAW_CSV_NAME = "creditcard.csv"
 
 # Function for downloading dataset from kaggle
 def download_dataset() -> Path:
-    """Download the Kaggle credit-card-fraud dataset into data/raw/.
+    """Make sure creditcard.csv is available at data/raw/creditcard.csv.
 
-    :return: Path to the downloaded creditcard.csv file.
+    Downloads the dataset from Kaggle only if the file is missing. On Google
+    Colab, kagglehub ignores output_dir and serves files from its own cache,
+    so the CSV is copied into data/raw/ from wherever kagglehub put it.
+
+    :return: Path to data/raw/creditcard.csv, which exists when this returns.
     """
+    target = RAW_DATA_DIR / RAW_CSV_NAME
+
+    if target.exists():
+        return target
+
     RAW_DATA_DIR.mkdir(parents=True, exist_ok=True)
-    kagglehub.dataset_download(
+
+    downloaded_dir = kagglehub.dataset_download(
         handle="mlg-ulb/creditcardfraud",
         output_dir=str(RAW_DATA_DIR)
     )
-    return RAW_DATA_DIR / RAW_CSV_NAME
+
+    source = Path(downloaded_dir) / RAW_CSV_NAME
+
+    if source.resolve() != target.resolve():
+        shutil.copy2(source, target)
+
+    return target
 
 # Function for loading raw data into a pandas dataframe
 def load_raw_data(path: Path | None = None) -> pd.DataFrame:
