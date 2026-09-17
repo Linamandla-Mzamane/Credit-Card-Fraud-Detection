@@ -95,7 +95,7 @@ The Random Forest is a close, defensible alternative. The full reasoning is in t
 
 ## How to Run
 
-Requires Python 3.11 or later.
+Requires Python 3.11, 3.12 or 3.13. TensorFlow, used for the neural network, does not yet support Python 3.14.
 
 **1. Install the package and its dependencies.**
 
